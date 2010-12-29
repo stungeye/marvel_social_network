@@ -1,3 +1,12 @@
+/*
+ Loads the Marvel social network data from the json variable defined in json.js.
+ 
+ This file was taken from the Force Directed Graph example found here:
+ 
+ http://thejit.org/static/v20/Jit/Examples/ForceDirected/example1.html
+  
+*/
+
 var labelType, useGradients, nativeTextSupport, animate;
 
 (function() {
@@ -110,7 +119,7 @@ function init(){
     //Number of iterations for the FD algorithm
     iterations: 200,
     //Edge length
-    levelDistance: 500,
+    levelDistance: 400,
     // Add text to the labels. This method is only triggered
     // on label creation and only for DOM labels (not native canvas ones).
     onCreateLabel: function(domElement, node){
@@ -141,7 +150,7 @@ function init(){
       Log.write(perc + '% loaded...');
     },
     onComplete: function(){
-      Log.write('done');
+      Log.write('');
       fd.animate({
         modes: ['linear'],
         transition: $jit.Trans.Elastic.easeOut,
