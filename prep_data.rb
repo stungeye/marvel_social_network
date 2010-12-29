@@ -2,6 +2,7 @@
 #
 # Author         : Wally Glutton - http://stungeye.com
 # Source Repo    : http://github.com/stungeye/marvel_social_network
+# Required       : json Gem http://flori.github.com/json/
 # Ruby Version   : Written and tested using Ruby 1.8.7.
 # License        : This is free and unencumbered software released into the public domain. See LICENSE for details.
 
@@ -10,8 +11,9 @@ require 'rubygems'
 require 'json'
 
 APPEARANCE_THRESHOLD = 600        # A character must appear in this many comic books to be included in the graph.
-SHARED_APPERANCE_THRESHOLD = 0              # Edges between character nodes are added if they represent more than this many shared appearances.
-FRIEND_TO_LINEWIDTH_SCALE = 1000  # Used to scale the width of the edges. Edge Width = 0.4 + (shared_apperances / FRIEND_TO_LINEWIDTH_SCALE) pixels
+SHARED_APPERANCE_THRESHOLD = 0    # Edges are added if they represent more than this many shared appearances.
+FRIEND_TO_LINEWIDTH_SCALE = 1000  # Scale the width of the edges.
+                                  # Edge Width = 0.4 + (shared_apperances / FRIEND_TO_LINEWIDTH_SCALE) pixels
 
 WORKING_DIR = File.dirname(__FILE__)
 names_file = WORKING_DIR + '/names.txt'
@@ -19,12 +21,12 @@ vertex_file = WORKING_DIR + '/vertex.txt'
 output_file = WORKING_DIR + '/resources/json.js'
 
 marvel_universe = {}
-# We will process the data such that this marvel_universe hash will key on the ids of each marvel character listed in names.txt.
+# Process the data such that this marvel_universe hash will key on the ids of each marvel character listed in names.txt.
 # The value for each key will be a hash with the following keys:
 # :name = Character Name
 # :appearance = Array of ids of comic books that feature this character.
 # :include = Boolean flag. True if this character has appear in more than APPEARANCE_THRESHOLD comics.
-# :friends = A hash where the keys represent the id of other marvel characters. The value represent the number of shared appearances.
+# :friends = A hash where: The Keys = IDs of other marvel characters. The Values = The number of shared appearances.
 
 # Start by finding all the character ids and names from the names_file.
 # Populating the marvel_universe hash.
@@ -88,8 +90,11 @@ marvel_universe.each do |id, hero|
     hero_hash['name'] = hero[:name]
     hero_hash['id'] = id
     hero[:friends].each do |friend_id, shared_apperances|
-        edge_hash = {"nodeTo" => friend_id, "nodeFrom" => id, "data" => {"$color" => "#909291", "$lineWidth" => 0.4 + 10.0 * shared_apperances / FRIEND_TO_LINEWIDTH_SCALE } }
-        hero_hash['adjacencies'] << edge_hash if shared_apperances > SHARED_APPERANCE_THRESHOLD # Only add edge if we exceed the 
+        edge_hash = { "nodeTo" => friend_id,
+                      "nodeFrom" => id,
+                      "data" => { "$color" => "#909291",
+                                  "$lineWidth" => 0.4 + 10.0 * shared_apperances / FRIEND_TO_LINEWIDTH_SCALE } }
+        hero_hash['adjacencies'] << edge_hash if shared_apperances > SHARED_APPERANCE_THRESHOLD 
     end
     marvel_universe_prepared << hero_hash
     count += 1
