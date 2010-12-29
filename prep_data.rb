@@ -1,4 +1,4 @@
-# Quick and dirty script to prepare the Marvel vertex data and package it as JSON.
+# Ruby script to prepare the Marvel vertex data and package it as JSON.
 #
 # Author         : Wally Glutton - http://stungeye.com
 # Source Repo    : http://github.com/stungeye/marvel_social_network
@@ -9,9 +9,9 @@ require 'pp'
 require 'rubygems'
 require 'json'
 
-APPEARANCE_THRESHOLD = 600
-FRIEND_THRESHOLD = 0
-FRIEND_TO_LINEWIDTH_SCALE = 1000
+APPEARANCE_THRESHOLD = 600        # A character must appear in this many comic books to be included in the graph.
+SHARED_APPERANCE_THRESHOLD = 0              # Edges between character nodes are added if they represent more than this many shared appearances.
+FRIEND_TO_LINEWIDTH_SCALE = 1000  # Used to scale the width of the edges. Edge Width = 0.4 + (shared_apperances / FRIEND_TO_LINEWIDTH_SCALE) pixels
 
 WORKING_DIR = File.dirname(__FILE__)
 names_file = WORKING_DIR + '/names.txt'
@@ -19,7 +19,7 @@ vertex_file = WORKING_DIR + '/vertex.txt'
 output_file = WORKING_DIR + '/resources/json.js'
 
 marvel_universe = {}
-# We will process the data such that this hash will key on the ids of each marvel character.
+# We will process the data such that this marvel_universe hash will key on the ids of each marvel character listed in names.txt.
 # The value for each key will be a hash with the following keys:
 # :name = Character Name
 # :appearance = Array of ids of comic books that feature this character.
@@ -43,7 +43,7 @@ File.foreach(names_file) do |line|
   marvel_universe[id] = { :name => name, :apperances => [] }
 end
 
-# Now find all the comic appearances for each character.
+# Now find all the comic appearances for each character in the vertex_file.
 # Add this data to the marvel_universe hash.
 File.foreach(vertex_file) do |line|
   # Each line of this file also starts with a character id.
@@ -54,7 +54,7 @@ File.foreach(vertex_file) do |line|
   marvel_universe[id][:include] = (marvel_universe[id][:apperances].size > APPEARANCE_THRESHOLD)
 end
 
-# Build out a new comic_apperances hash that keys on specific comic-book ids.
+# Build a comic_apperances hash that keys on specific comic-book ids.
 # The value of each key is an array of the ids of characters who appeared in this comic-book.
 comic_appearances = {}
 marvel_universe.each do |id, hero|
@@ -70,7 +70,7 @@ marvel_universe.each do |id, hero|
     hero[:friends] = {}
     hero[:apperances].each do |apperance|
       comic_appearances[apperance].each do |friend_id|
-        if marvel_universe[friend_id][:include] && (friend_id != id)
+        if marvel_universe[friend_id][:include] && (friend_id != id) # Only add friends that are included in the graph.
           hero[:friends][friend_id] ||= 0
           hero[:friends][friend_id] += 1
         end
@@ -79,7 +79,7 @@ marvel_universe.each do |id, hero|
   end
 end
 
-# Build the prepared data structure. Ready for JSON export to json.js for use with force.js.
+# Build the prepared data structure. 
 marvel_universe_prepared = []
 count = 0
 marvel_universe.each do |id, hero|
@@ -87,15 +87,16 @@ marvel_universe.each do |id, hero|
     hero_hash = { 'adjacencies' => [], 'data' => {'$color' => '#83548B', '$type' => 'circle', '$dim' => 10}}
     hero_hash['name'] = hero[:name]
     hero_hash['id'] = id
-    hero[:friends].each do |friend_id, friend_count|
-        edge_hash = {"nodeTo" => friend_id, "nodeFrom" => id, "data" => {"$color" => "#909291", "$lineWidth" => 0.4 + 10.0 * friend_count / FRIEND_TO_LINEWIDTH_SCALE } }
-        hero_hash['adjacencies'] << edge_hash if friend_count > FRIEND_THRESHOLD 
+    hero[:friends].each do |friend_id, shared_apperances|
+        edge_hash = {"nodeTo" => friend_id, "nodeFrom" => id, "data" => {"$color" => "#909291", "$lineWidth" => 0.4 + 10.0 * shared_apperances / FRIEND_TO_LINEWIDTH_SCALE } }
+        hero_hash['adjacencies'] << edge_hash if shared_apperances > SHARED_APPERANCE_THRESHOLD # Only add edge if we exceed the 
     end
     marvel_universe_prepared << hero_hash
     count += 1
   end
 end
 
+# JSON export to the output_file for use with force.js.
 json =  marvel_universe_prepared.to_json
 File.open(output_file, 'w+') {|f| f.write("var json =#{json};") }
-puts "Added #{count} heros to the file."
+puts "Added #{count} heroes to the file."
