@@ -2,6 +2,8 @@
 
 Visualization of [the Social characteristics of the Marvel Universe](http://bioinfo.uib.es/~joemiro/marvel.html) using [the Javascript Infovis Toolkit](http://thejit.org/) (JIT).
 
+**See the Visualization: [Marvel Social Network Graph](http://stungeye.com/viz/marvel/marvel.html).**
+
 The provided Ruby script takes the data provided by [Joe Miro, Cesc Rosselló, Ricardo Alberich](http://bioinfo.uib.es/~joemiro/marvel.html) and the [Marvel Chronology Project](http://www.chronologyproject.com/) and formats it for use with a [JIT Force-Directed Graph](http://thejit.org/static/v20/Jit/Examples/ForceDirected/example1.html).
 
 The graph shows the "social network" of characters from the Marvel comic book universe. The lines (edges) between characters nodes represent shared comic-book apperances.

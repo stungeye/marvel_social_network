@@ -86,7 +86,7 @@ marvel_universe_prepared = []
 count = 0
 marvel_universe.each do |id, hero|
   if hero[:include]
-    hero_hash = { 'adjacencies' => [], 'data' => {'$color' => '#83548B', '$type' => 'circle', '$dim' => 10}}
+    hero_hash = { 'adjacencies' => [], 'data' => {'$color' => '#f1c932', '$type' => 'star', '$dim' => 15}}
     hero_hash['name'] = hero[:name]
     hero_hash['id'] = id
     hero[:friends].each do |friend_id, shared_apperances|
