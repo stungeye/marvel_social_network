@@ -4,6 +4,8 @@ Visualization of [the Social characteristics of the Marvel Universe](http://bioi
 
 The provided Ruby script takes the data provided by [Joe Miro, Cesc Rosselló, Ricardo Alberich](http://bioinfo.uib.es/~joemiro/marvel.html) and the [Marvel Chronology Project](http://www.chronologyproject.com/) and formats it for use with a [JIT Force-Directed Graph](http://thejit.org/static/v20/Jit/Examples/ForceDirected/example1.html).
 
+The graph shows the "social network" of characters from the Marvel comic book universe. The lines (edges) between characters nodes represent shared comic-book apperances.
+
 ## Examples
 
 [Example screen capture](https://github.com/stungeye/marvel_social_network/raw/master/examples/example1.png) with the constants in prep_data.rb set to:
@@ -25,6 +27,12 @@ In both cases I have manually tweaked the positions of the nodes.
 * resources/force.js - JIT force-directed sample JS found [here](http://thejit.org/static/v20/Jit/Examples/ForceDirected/example1.html).
 * resource/json.js - JSON data produced by the prep_data.rb script.
 * resource/* - JIT JS & CSS.
+
+## Instructions
+
+* Change the constants in the prep_data.rb file.
+* Execute the prep_data.rb script. (The output will be saved to resources/json.js.)
+* Open marvel.html in your web-browser. (For browsers that don't support the cavas element, [excanvas.js](http://excanvas.sourceforge.net/) is used.)
 
 ## License
 
