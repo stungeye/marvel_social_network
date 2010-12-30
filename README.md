@@ -2,6 +2,20 @@
 
 Visualization of [the Social characteristics of the Marvel Universe](http://bioinfo.uib.es/~joemiro/marvel.html) using [the Javascript Infovis Toolkit](http://thejit.org/) (JIT).
 
+The provided Ruby script takes the data provided by [Joe Miro, Cesc Rosselló, Ricardo Alberich](http://bioinfo.uib.es/~joemiro/marvel.html) and the [Marvel Chronology Project](http://www.chronologyproject.com/) and formats it for use with a [JIT Force-Directed Graph](http://thejit.org/static/v20/Jit/Examples/ForceDirected/example1.html).
+
+## Examples
+
+[Example screen capture](https://github.com/stungeye/marvel_social_network/raw/master/examples/example1.png) with the constants in prep_data.rb set to:
+
+APPEARANCE_THRESHOLD = 600        
+SHARED_APPERANCE_THRESHOLD = 0    
+FRIEND_TO_LINEWIDTH_SCALE = 1000 
+
+Change SHARED_APPERANCE_THRESHOLD to 600 and you get [this screen capture](https://github.com/stungeye/marvel_social_network/raw/master/examples/example2.png).
+
+In both cases I have manually tweaked the positions of the nodes.
+
 ## Files
 
 * names.txt - Marvel comic character IDs and names. [source](http://bioinfo.uib.es/~joemiro/marvel.html)
