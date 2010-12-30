@@ -32,7 +32,7 @@ In both cases I have manually tweaked the positions of the nodes.
 
 * Change the constants in the prep_data.rb file.
 * Execute the prep_data.rb script. (The output will be saved to resources/json.js.)
-* Open marvel.html in your web-browser. (For browsers that don't support the cavas element, [excanvas.js](http://excanvas.sourceforge.net/) is used.)
+* Open marvel.html in your web-browser. (For IE < 9 [excanvas.js](http://excanvas.sourceforge.net/) is provided.)
 
 ## License
 
